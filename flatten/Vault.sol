@@ -813,10 +813,16 @@ contract Vault is Ownable, ReentrancyGuard {
     WETH = IWETH(_WETH);
 
     setRewardToken(_rewardToken);
+    setRewardContract(_rewardContract);
     setWithdrawalFeePercentage(_withdrawalFeePercentage);
     setApyPercentage(_apyPercentage);
     setEnableStaking(true);
   }
+
+  receive()
+  external
+  payable
+  {}
 
   function stake(uint _tokens)
   external

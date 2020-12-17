@@ -34,8 +34,8 @@ module.exports = async function (deployer, network, accounts) {
 
     const weth = await MockERC20.deployed();
     // await weth.getFreeTokens(accounts[0], "999000000000000000000");
-    await weth.deposit({from: accounts[0], value: "8000000000000000000"});
-    await weth.deposit({from: accounts[1], value: "3000000000000000000"});
+    await weth.deposit({from: accounts[0], value: "800000000000000000"});
+    await weth.deposit({from: accounts[1], value: "300000000000000000"});
     WETHAddress = MockERC20.address;
 
     const uniswapFactory = await UniswapV2Factory.deployed();
@@ -53,8 +53,8 @@ module.exports = async function (deployer, network, accounts) {
     // console.log("test3", await router.getPairAddress(MockERC20.address, Token.address));
 
     const liquidityAdder = await LiquidityAdder.deployed();
-    await liquidityAdder.addLiquiditySingle(Token.address, "8880000000000000000000", "8000000000000000000", {from: accounts[0], value: "8000000000000000000"});
-    await liquidityAdder.addLiquiditySingle(Token.address, "3330000000000000000000", "3000000000000000000", {from: accounts[1], value: "3000000000000000000"});
+    await liquidityAdder.addLiquiditySingle(Token.address, "888000000000000000000", "800000000000000000", {from: accounts[0], value: "800000000000000000"});
+    await liquidityAdder.addLiquiditySingle(Token.address, "333000000000000000000", "300000000000000000", {from: accounts[1], value: "300000000000000000"});
   }
 
   await deployer.deploy(Vault,
