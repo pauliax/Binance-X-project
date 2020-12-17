@@ -7,13 +7,16 @@ import "@openzeppelin/contracts/token/ERC20/ERC20Burnable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 
+import "./interfaces/IToken.sol";
 import "./interfaces/ICallable.sol";
 
-contract Token is ERC20Snapshot, ERC20Burnable, Ownable, AccessControl  {
+contract Token is IToken, ERC20Snapshot, ERC20Burnable, Ownable, AccessControl {
 
   using SafeMath for uint;
 
   bytes32 public constant SNAPSHOT_ROLE = keccak256("SNAPSHOT_ROLE");
+
+  bytes32 public constant MINTING_ROLE = keccak256("MINTING_ROLE");
 
   constructor(
     string memory _name,
@@ -25,23 +28,34 @@ contract Token is ERC20Snapshot, ERC20Burnable, Ownable, AccessControl  {
     _mint(msg.sender, _initialSupplyWithoutDecimals * (10 ** uint(decimals())));
   }
 
-  function grantSnapshotRole(address _snapshotAddress)
-  external
-  onlyOwner
+  function mint(address _beneficiary, uint _amount)
+  public
+  override(IToken)
   {
-    _setupRole(SNAPSHOT_ROLE, _snapshotAddress);
+    require(hasRole(MINTING_ROLE, _msgSender()), "AccessControl: not minting address");
+    _mint(_beneficiary, _amount);
   }
 
   function snapshot()
   public
+  override(IToken)
   returns (uint)
   {
     require(hasRole(SNAPSHOT_ROLE, _msgSender()), "AccessControl: not snapshot address");
     return super._snapshot();
   }
 
+  function burn(uint _amount)
+  public
+  virtual
+  override(ERC20Burnable, IToken)
+  {
+    super.burn(_amount);
+  }
+
   function transferAndCall(address _to, uint _tokens, bytes calldata _data)
   external
+  override
   returns (bool)
   {
     transfer(_to, _tokens);
