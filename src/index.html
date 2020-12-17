@@ -1,61 +1,110 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Pete's Pet Shop</title>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+  <title>Binance X project</title>
 
-    <!-- Bootstrap -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap -->
+  <link href="css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
-  </head>
-  <body>
-    <div class="container">
-      <div class="row">
-        <div class="col-xs-12 col-sm-8 col-sm-push-2">
-          <h1 class="text-center">Pete's Pet Shop</h1>
-          <hr/>
-          <br/>
-        </div>
+  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<div class="container">
+
+  <div class="mb-4">
+    <h3 class="text-left ml-0">Account: <span id="account">0x0</span></h3>
+    <h3 class="text-left ml-0">Balance: <span id="tokenBalance">0</span> TEST tokens</h3>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-12 col-sm-8 col-sm-push-2">
+      <h1 class="text-center">Chemistry Lab</h1>
+      <hr/>
+      <br/>
+    </div>
+  </div>
+
+  <div class="meta-info">
+    <p><strong>APY:</strong> <span id="apyPercentage">?</span>%</p>
+    <p><strong>Withdrawal fee:</strong> <span id="withdrawalFeePercentage">?</span>%</p>
+    <p><strong>Total staked:</strong> <span id="totalStaked">?</span> LP tokens</p>
+  </div>
+
+  <div class="row">
+    <div id="stakeBtnContainer" class="btn-action">
+      <div class="max-input">
+        <input id="stakeAmount" type="number" placeholder="Amount to Stake" aria-label="stake amount"/>
+        <button id="stakeBtn" class="btn btn-default" type="button">Stake</button>
       </div>
-
-      <div id="petsRow" class="row">
-        <!-- PETS LOAD HERE -->
-      </div>
+      <p class="tokens-info">Balance: <span id="lpBalance">0</span> LP tokens</p>
     </div>
 
-    <div id="petTemplate" style="display: none;">
-      <div class="col-sm-6 col-md-4 col-lg-3">
-        <div class="panel panel-default panel-pet">
-          <div class="panel-heading">
-            <h3 class="panel-title">Scrappy</h3>
-          </div>
-          <div class="panel-body">
-            <img alt="140x140" data-src="holder.js/140x140" class="img-rounded img-center" style="width: 100%;" src="https://animalso.com/wp-content/uploads/2017/01/Golden-Retriever_6.jpg" data-holder-rendered="true">
-            <br/><br/>
-            <strong>Breed</strong>: <span class="pet-breed">Golden Retriever</span><br/>
-            <strong>Age</strong>: <span class="pet-age">3</span><br/>
-            <strong>Location</strong>: <span class="pet-location">Warren, MI</span><br/><br/>
-            <button class="btn btn-default btn-adopt" type="button" data-id="0">Adopt</button>
-          </div>
-        </div>
+    <div id="withdrawBtnContainer" class="btn-action">
+      <div class="max-input">
+        <input id="withdrawAmount" type="number" placeholder="Amount to Withdraw" aria-label="withdraw amount"/>
+        <button id="withdrawBtn" class="btn btn-default" type="button">Withdraw</button>
       </div>
+      <p class="tokens-info">Staked balance: <span id="stakeBalance">0</span> LP tokens</p>
     </div>
 
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/web3.min.js"></script>
-    <script src="js/truffle-contract.js"></script>
-    <script src="js/app.js"></script>
-  </body>
+    <div id="claimBtnContainer" class="btn-action">
+      <p class="tokens-info">My rewards: <span id="rewardBalance">0</span> TEST tokens</p>
+      <button id="claimBtn" class="btn btn-default" type="button">Claim</button>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-12 col-sm-8 col-sm-push-2">
+      <h1 class="text-center">Snapshot Rewards</h1>
+      <hr/>
+      <br/>
+    </div>
+  </div>
+
+  <div id="dataRow" class="row">
+    <!-- Data LOAD HERE -->
+  </div>
+
+  <div class="row">
+    <h3 class="text-center">Network info</h3>
+    <div><strong>Name:</strong> Binance Smart Chain Testnet</div>
+    <div><strong>RPC URL:</strong> https://data-seed-prebsc-1-s1.binance.org:8545</div>
+    <div><strong>ChainID:</strong> 0x61</div>
+    <div><strong>Symbol:</strong> BNB</div>
+    <div><strong>Block Explorer:</strong> https://explorer.binance.org/smart-testnet</div>
+  </div>
+</div>
+
+<div id="template" style="display: none;">
+  <div class="col-sm-6 col-md-4 col-lg-3">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3>Reward #<span class="reward-title">?</span></h3>
+      </div>
+      <div class="panel-body">
+        <strong>Reward</strong>: <span class="reward-amount">?</span> ETH<br/>
+        <strong>My share</strong>: <span class="reward-my-share">?</span> ETH<br/>
+        <button class="btn btn-default btn-claim" type="button" data-id="0">Claim</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="js/bootstrap.min.js"></script>
+<script src="js/web3.min.js"></script>
+<script src="js/truffle-contract.js"></script>
+<script src="js/app.js"></script>
+</body>
 </html>

@@ -25,7 +25,7 @@ contract Reward is Ownable, ReentrancyGuard {
 
   uint public constant CLAIM_DEADLINE = 182 days;
 
-  uint public constant MIN_SNAPSHOT_INTERVAL = 1 weeks;
+  uint public constant MIN_SNAPSHOT_INTERVAL = 1 hours; //adjust depending on the network
 
   IToken public token;
 
@@ -51,7 +51,7 @@ contract Reward is Ownable, ReentrancyGuard {
 
   constructor(address _token)
   {
-    lastSnapshot = _getNow();
+//    lastSnapshot = _getNow(); test
     setToken(_token);
   }
 
@@ -69,6 +69,7 @@ contract Reward is Ownable, ReentrancyGuard {
   external
   payable
   {
+//  require(false, "cant come here");
     _deposit(msg.value);
     emit Deposit(msg.sender, msg.value, _getNow());
   }
@@ -236,10 +237,10 @@ contract Reward is Ownable, ReentrancyGuard {
   {
     require(_weiAmount > 0, "Must deposit something");
 
-    uint timeElapsed = _getNow() - lastSnapshot;
+//    uint timeElapsed = _getNow() - lastSnapshot;
 
     // do the snapshot if at least 1 week passed since last snapshot
-    if (timeElapsed >= MIN_SNAPSHOT_INTERVAL) {
+//    if (timeElapsed >= MIN_SNAPSHOT_INTERVAL) {
       uint snapshotId = token.snapshot();
       uint totalSupplyAtSnapshot = token.totalSupplyAt(snapshotId);
 
@@ -263,10 +264,10 @@ contract Reward is Ownable, ReentrancyGuard {
 
       rewards.push(newReward);
 
-      lastSnapshot = _getNow();
+//      lastSnapshot = _getNow();
 
       emit NewReward(newId, snapshotId, _weiAmount, _getNow());
-    }
+//    }
   }
 
   function _getNow() internal view returns (uint) {

@@ -14,7 +14,12 @@ contract MockERC20 is ERC20 {
     _mint(msg.sender, msg.value);
   }
 
-  function getFreeTokens(address to, uint256 amount) public {
-    _mint(to, amount);
+//  function getFreeTokens(address to, uint256 amount) public {
+//    _mint(to, amount);
+//  }
+
+  function withdraw(uint _amount) public {
+    (bool success,) = msg.sender.call{ value : _amount}("");
+    require(success, "MockERC20: unable to send value, recipient may have reverted");
   }
 }

@@ -45,9 +45,13 @@ contract LiquidityAdder {
     uint256 amountWeth
   )
   public
+  payable
   {
+    require(msg.value == amountWeth, "Invalid msg.value");
+
     IToken(token).mint(address(this), amountToken);
-    weth.getFreeTokens(address(this), amountWeth);
+//    weth.getFreeTokens(address(this), amountWeth);
+    weth.deposit{ value: amountWeth }();
     IERC20(address(token)).approve(address(router), amountToken);
     weth.approve(address(router), amountWeth);
     router.addLiquidity(

@@ -33,7 +33,9 @@ module.exports = async function (deployer, network, accounts) {
     await deployer.deploy(LiquidityAdder, MockERC20.address, UniswapV2Factory.address, UniswapV2Router02.address);
 
     const weth = await MockERC20.deployed();
-    await weth.getFreeTokens(accounts[0], "999000000000000000000");
+    // await weth.getFreeTokens(accounts[0], "999000000000000000000");
+    await weth.deposit({from: accounts[0], value: "8000000000000000000"});
+    await weth.deposit({from: accounts[1], value: "3000000000000000000"});
     WETHAddress = MockERC20.address;
 
     const uniswapFactory = await UniswapV2Factory.deployed();
@@ -51,7 +53,8 @@ module.exports = async function (deployer, network, accounts) {
     // console.log("test3", await router.getPairAddress(MockERC20.address, Token.address));
 
     const liquidityAdder = await LiquidityAdder.deployed();
-    await liquidityAdder.addLiquiditySingle(Token.address, "7770000000000000000000", "888000000000000000000");
+    await liquidityAdder.addLiquiditySingle(Token.address, "8880000000000000000000", "8000000000000000000", {from: accounts[0], value: "8000000000000000000"});
+    await liquidityAdder.addLiquiditySingle(Token.address, "3330000000000000000000", "3000000000000000000", {from: accounts[1], value: "3000000000000000000"});
   }
 
   await deployer.deploy(Vault,
@@ -66,10 +69,12 @@ module.exports = async function (deployer, network, accounts) {
   await tokenInstance.grantRole(MINTING_ROLE, Vault.address);
   await tokenInstance.grantRole(SNAPSHOT_ROLE, Reward.address);
 
-  await tokenInstance.transfer(accounts[1], "20000000000000000000000", {from: accounts[0]});  // 20%
-  await tokenInstance.transfer(accounts[2], "1000000000000000000000", {from: accounts[0]});  // 1%
+  await tokenInstance.transfer(accounts[1], "20000000000000000000000", {from: accounts[0]});
+  await tokenInstance.transfer(accounts[2], "1000000000000000000000", {from: accounts[0]});
 
   const rewardInstance = await Reward.deployed();
   // blacklist owner wallet and LP token address
-  await rewardInstance.addBlacklist([accounts[0], lpTokenAddress]);
+  // await rewardInstance.addBlacklist([accounts[0], lpTokenAddress]);
+
+  // await rewardInstance.send({from: accounts[0], value: "1000000000000000000"}); // deposit 1 eth
 };
