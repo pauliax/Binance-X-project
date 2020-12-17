@@ -37,3 +37,111 @@ This model is expected to benefit both HODLers and liquidity providers.
 ![screenshot 1](screenshots/1.png)
 
 ![screenshot 2](screenshots/2.png)
+
+
+## Technical stuff
+
+### Technologies used
+
+* Node v14.15
+* Solidity 0.7.5
+* Truffle v5 (+ pet-shop box)
+* Web3.js v1.2.9
+
+### Instructions
+
+Clone the project
+
+Install Truffle framework: 
+
+```
+npm install -g truffle
+```
+
+Install dependencies: 
+
+```
+npm install
+```
+
+Create .env file in root directory with the same content as in .env.example (replace <...> with real values). 
+Infura key can be obtained from https://infura.io/
+
+Compile the contracts:
+
+```
+truffle compile
+```
+
+Deploy:
+
+See available networks in truffle-config.js.
+Also check migrations/2_deploy_contracts.js file to make sure that the deployment parameters are correct.
+
+### Token contract parameters:
+
+_name
+
+    // Token name.
+    
+_symbol
+    
+    // Token symbol.
+    
+_initialSupplyWithoutDecimals
+
+    // Initial supply (premine). Specify it without decimals. It is sent to the deployer address.
+
+### Reward contract parameters:
+
+_token
+    
+    // Token contract address.
+
+### Vault contract parameters:
+
+_lpToken
+
+    // LP pair token address
+
+_rewardToken
+
+    // Token contract address.
+
+_WETH
+
+    // WETH address.
+    
+_rewardContract
+    
+    // Reward contract address.
+
+__withdrawalFeePercentage
+
+    // Withdrawal fee percentage. Please note that denominator is 10000 so to set 8% you need to input 800.
+    
+_apyPercentage
+
+    // APY percentage. Please note that denominator is 10000 so to set 300% you need to input 30000.
+
+Deploy on BSC testnet:
+
+```
+npm run migrate-bsctest
+```
+
+Rinkeby:
+
+```
+npm run migrate-rinkeby
+```
+
+Mainnet:
+
+If you are deploying to the mainnet, please adjust gasPrice (you can adjust gas amount also) in the truffle-config.js.
+
+```
+npm run migrate-live
+```
+
+Or you can deploy the flattened contracts (under directory flatten) yourself (for example, with Remix IDE).
