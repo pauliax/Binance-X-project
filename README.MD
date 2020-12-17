@@ -1,6 +1,6 @@
 # Xmas Lab
 
-### The DApp is deployed on the  BSC testnet.
+### The DApp is deployed on the BSC testnet.
 
 The application consists of 2 main parts: the laboratory and reward snapshots.
 
@@ -14,13 +14,18 @@ Then, XLAB token HODLers can claim their share in proportion to how much XLABs t
 
 This model is expected to benefit both HODLers and liquidity providers.
 
+**PancakeSwap did not work very well on BSC testnet 
+  so we had to deploy our own mock version of Uniswapv2 and create an LP pair.**
+
 ---
 
 * [Binance X Hackathon on Gitcoin](https://gitcoin.co/issue/binancex/Grant-projects/8/100024334 "Link to the hackaton")
 
-* [Video presentation](https://www.youtube.com/ "Link to a video presentation")
-
 * [Deployed DApp](https://xmas-lab.netlify.app/ "Link to the DApp")
+
+* Video presentation:
+
+[![Video presentation](http://img.youtube.com/vi/aljM-yXoiYs/default.jpg)](https://youtu.be/aljM-yXoiYs)
 
 ---
 
