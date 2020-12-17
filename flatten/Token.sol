@@ -1684,19 +1684,6 @@ abstract contract AccessControl is Context {
     }
 }
 
-// File: contracts\interfaces\IToken.sol
-
-interface IToken {
-
-  function mint(address _beneficiary, uint _amount) external;
-
-  function burn(uint _amount) external;
-
-  function snapshot() external returns (uint);
-
-  function transferAndCall(address _to, uint _tokens, bytes calldata _data) external returns (bool);
-}
-
 // File: contracts\interfaces\ICallable.sol
 
 interface ICallable {
@@ -1709,9 +1696,9 @@ interface ICallable {
 
 // SPDX-License-Identifier: UNLICENSED
 
-pragma solidity ^0.7.5;
+pragma solidity ^0.7.5;
 
-contract Token is IToken, ERC20Snapshot, ERC20Burnable, Ownable, AccessControl {
+contract Token is ERC20Snapshot, ERC20Burnable, Ownable, AccessControl {
 
   using SafeMath for uint;
 
@@ -1731,7 +1718,6 @@ contract Token is IToken, ERC20Snapshot, ERC20Burnable, Ownable, AccessControl {
 
   function mint(address _beneficiary, uint _amount)
   public
-  override(IToken)
   {
     require(hasRole(MINTING_ROLE, _msgSender()), "AccessControl: not minting address");
     _mint(_beneficiary, _amount);
@@ -1739,24 +1725,14 @@ contract Token is IToken, ERC20Snapshot, ERC20Burnable, Ownable, AccessControl {
 
   function snapshot()
   public
-  override(IToken)
   returns (uint)
   {
     require(hasRole(SNAPSHOT_ROLE, _msgSender()), "AccessControl: not snapshot address");
     return super._snapshot();
   }
 
-  function burn(uint _amount)
-  public
-  virtual
-  override(ERC20Burnable, IToken)
-  {
-    super.burn(_amount);
-  }
-
   function transferAndCall(address _to, uint _tokens, bytes calldata _data)
   external
-  override
   returns (bool)
   {
     transfer(_to, _tokens);

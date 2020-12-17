@@ -720,13 +720,28 @@ interface IToken {
   function snapshot() external returns (uint);
 
   function transferAndCall(address _to, uint _tokens, bytes calldata _data) external returns (bool);
+
+  function totalSupplyAt(uint _snapshotId) external view returns (uint);
+
+  function balanceOfAt(address _account, uint _snapshotId) external view returns (uint);
+}
+
+// File: contracts\interfaces\IWETH.sol
+
+interface IWETH {
+
+  function deposit() external payable;
+
+  function transfer(address _to, uint _value) external returns (bool);
+
+  function withdraw(uint _amount) external;
 }
 
 // File: contracts\Vault.sol
 
 // SPDX-License-Identifier: UNLICENSED
 
-pragma solidity ^0.7.5;
+pragma solidity ^0.7.5;
 
 contract Vault is Ownable, ReentrancyGuard {
 
@@ -746,7 +761,9 @@ contract Vault is Ownable, ReentrancyGuard {
 
   IToken public rewardToken;
 
-  IERC20 public WETH;
+  IWETH public WETH;
+
+  address public rewardContract;
 
   address private token0;
 
@@ -765,7 +782,7 @@ contract Vault is Ownable, ReentrancyGuard {
   event TokenStake(address indexed _who, uint _amount, uint _timestamp);
   event TokenWithdraw(address indexed _who, uint _amount, uint _timestamp);
   event TokenClaim(address indexed _who, uint _amount, uint _timestamp);
-  event BurnAndSync(address indexed _who, uint _amountBurned, uint _amountSynced, uint _timestamp);
+  event BurnAndReward(address indexed _who, uint _amountBurned, uint _amountRewarded, uint _timestamp);
 
   // Use this on every fn that can change user's rewards data in any way
   modifier updatesRewards(address _account) {
@@ -782,6 +799,7 @@ contract Vault is Ownable, ReentrancyGuard {
     address _lpToken,
     address _rewardToken,
     address _WETH,
+    address _rewardContract,
     uint _withdrawalFeePercentage,
     uint _apyPercentage
   )
@@ -792,7 +810,7 @@ contract Vault is Ownable, ReentrancyGuard {
     token0 = lpToken.token0();
 
     require(_WETH != address(0));
-    WETH = IERC20(_WETH);
+    WETH = IWETH(_WETH);
 
     setRewardToken(_rewardToken);
     setWithdrawalFeePercentage(_withdrawalFeePercentage);
@@ -875,6 +893,14 @@ contract Vault is Ownable, ReentrancyGuard {
     rewardToken = IToken(_rewardToken);
   }
 
+  function setRewardContract(address _rewardContract)
+  public
+  onlyOwner
+  {
+    require(_rewardContract != address(0));
+    rewardContract = _rewardContract;
+  }
+
   function setWithdrawalFeePercentage(uint _withdrawalFeePercentage)
   public
   onlyOwner
@@ -951,14 +977,14 @@ contract Vault is Ownable, ReentrancyGuard {
     user.stake = _toUint112(uint(user.stake).sub(_tokens));
     totalStaked = totalStaked.sub(_tokens);
 
-    _burnAndSync(fee);
+    _burnAndReward(fee);
     require(lpToken.transfer(_account, tokensToWithdraw), "Tokens transfer failed");
 
     emit TokenWithdraw(_account, tokensToWithdraw, block.timestamp);
   }
 
-  // Retrieve both tokens from LP pair. Burn reward token. Send ETH back to pair and sync the price.
-  function _burnAndSync(uint _amount)
+  // Retrieve both tokens from LP pair. Burn reward token. Send WETH to the reward contract.
+  function _burnAndReward(uint _amount)
   internal
   {
     address lpTokenAddress = address(lpToken);
@@ -968,14 +994,19 @@ contract Vault is Ownable, ReentrancyGuard {
     (uint amount0, uint amount1) = lpToken.burn(address(this));
     uint amountB = rewardTokenAddress == token0 ? amount1 : amount0;
 
-    // burn the whole balance of the reward token as it is deflationary and amountA is not the real amount.
+    // burn the whole balance of the reward token
     uint rewardTokenBalance = IERC20(rewardTokenAddress).balanceOf(address(this));
     rewardToken.burn(rewardTokenBalance);
 
-    WETH.transfer(lpTokenAddress, amountB);
-    lpToken.sync();
+    // unwrap weth and send to the reward contract
+    uint wethBalance = IERC20(address(WETH)).balanceOf(address(this));
+    WETH.withdraw(wethBalance);
 
-    emit BurnAndSync(msg.sender, rewardTokenBalance, amountB, block.timestamp);
+    // solhint-disable-next-line avoid-low-level-calls, avoid-call-value
+    (bool success, ) = rewardContract.call{ value: wethBalance }("");
+    require(success, "BurnAndReward: unable to send value, recipient may have reverted");
+
+    emit BurnAndReward(msg.sender, rewardTokenBalance, wethBalance, block.timestamp);
   }
 
   function calculateRewards()

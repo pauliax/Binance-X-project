@@ -13,6 +13,7 @@
     "run-ganache": "ganache-cli --networkId 4447 -l 10000000 -g 2000000000",
     "flatten-token": "./node_modules/.bin/truffle-flattener ./contracts/Token.sol --output ./flatten/Token.sol",
     "flatten-vault": "./node_modules/.bin/truffle-flattener ./contracts/Vault.sol --output ./flatten/Vault.sol",
+    "flatten-reward": "./node_modules/.bin/truffle-flattener ./contracts/Reward.sol --output ./flatten/Reward.sol",
     "coverage": "truffle run coverage",
     "migrate-dev": "truffle migrate --network development --reset",
     "migrate-rinkeby": "truffle migrate --network rinkeby --reset",
