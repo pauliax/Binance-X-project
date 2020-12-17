@@ -216,6 +216,7 @@ App = {
         console.log("numberOfRewards", numberOfRewards.toString());
 
         let dataRow = $('#dataRow');
+        dataRow.find(".tempItem").remove();
         const template = $('#template');
 
         for (let i = 0; i < numberOfRewards; i++) {
