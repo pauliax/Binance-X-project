@@ -69,7 +69,6 @@ contract Reward is Ownable, ReentrancyGuard {
   external
   payable
   {
-//  require(false, "cant come here");
     _deposit(msg.value);
     emit Deposit(msg.sender, msg.value, _getNow());
   }
@@ -237,7 +236,7 @@ contract Reward is Ownable, ReentrancyGuard {
   {
     require(_weiAmount > 0, "Must deposit something");
 
-//    uint timeElapsed = _getNow() - lastSnapshot;
+    uint timeElapsed = _getNow() - lastSnapshot;
 
     // do the snapshot if at least 1 week passed since last snapshot
 //    if (timeElapsed >= MIN_SNAPSHOT_INTERVAL) {
@@ -264,7 +263,7 @@ contract Reward is Ownable, ReentrancyGuard {
 
       rewards.push(newReward);
 
-//      lastSnapshot = _getNow();
+      lastSnapshot = _getNow();
 
       emit NewReward(newId, snapshotId, _weiAmount, _getNow());
 //    }

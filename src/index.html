@@ -5,10 +5,14 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-  <title>Binance X project</title>
+  <title>Xmas Lab</title>
 
   <!-- Bootstrap -->
   <link href="css/bootstrap.min.css" rel="stylesheet">
+
+  <link href="css/styles.css" rel="stylesheet">
+
+  <link rel="shortcut icon" href="images/lab.png" type="image/x-icon">
 
   <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -18,55 +22,93 @@
   <![endif]-->
 </head>
 <body>
-<div class="container">
+<div id="main" class="container">
 
-  <div class="mb-4">
-    <h3 class="text-left ml-0">Account: <span id="account">0x0</span></h3>
-    <h3 class="text-left ml-0">Balance: <span id="tokenBalance">0</span> TEST tokens</h3>
+  <div class="mb-4 header">
+    <h3 class="text-center ml-0" style="color: red">
+      This project is built for the Binance X hackathon. Please use the BSC testnet and do not send real funds!
+    </h3>
+    <h3 class="text-center ml-0">Account: <span id="account">0x0</span></h3>
+    <h3 class="text-center ml-0">Balance: <span id="tokenBalance">0</span> XLAB tokens</h3>
+  </div>
+
+  <div id="lab" class="container">
+
+    <div class="row">
+      <div class="col-xs-12 col-sm-8 col-sm-push-2" style="z-index: 1;">
+        <hr/>
+        <h1 class="text-center">Xmas Laboratory</h1>
+        <hr/>
+        <p>
+          Here you can stake your XLAB/BNB LP tokens.
+          LP tokens can be acquired by providing liquidity on PancakeSwap (Uniswap alternative on BSC).
+          To disincentivize withdrawals there is a fee that is distributed to XLAB token HODLers.
+        </p>
+        <br/>
+      </div>
+      <img src="images/mirage-science.png" style="z-index: -1; opacity: 0.7;" alt="mirage" width="250" height="300"/>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-4">
+        <p><strong>APY:</strong> <span id="apyPercentage">?</span>%</p>
+      </div>
+      <div class="col-xs-4">
+        <p><strong>Withdrawal fee:</strong> <span id="withdrawalFeePercentage">?</span>%</p>
+      </div>
+      <div class="col-xs-4">
+        <p><strong>Total staked:</strong> <span id="totalStaked">?</span> LP tokens</p>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-4">
+        <div id="stakeBtnContainer" class="btn-action">
+          <div class="max-input">
+            <input id="stakeAmount" type="number" placeholder="Amount to Stake" aria-label="stake amount"/>
+            <button id="stakeBtn" class="btn btn-default btn-app" type="button">Stake</button>
+          </div>
+          <p class="tokens-info">Balance: <span id="lpBalance">0</span> LP tokens</p>
+        </div>
+      </div>
+
+      <div class="col-xs-4">
+        <div id="withdrawBtnContainer" class="btn-action">
+          <div class="max-input">
+            <input id="withdrawAmount" type="number" placeholder="Amount to Withdraw" aria-label="withdraw amount"/>
+            <button id="withdrawBtn" class="btn btn-default btn-app" type="button">Withdraw</button>
+          </div>
+          <p class="tokens-info">Staked balance: <span id="stakeBalance">0</span> LP tokens</p>
+        </div>
+      </div>
+
+      <div class="col-xs-4">
+        <div id="claimBtnContainer" class="btn-action">
+          <div class="max-input">
+            <p class="tokens-info">My rewards: <span id="rewardBalance">0</span> XLAB tokens</p>
+            <button id="claimBtn" class="btn btn-default btn-app" type="button">Claim</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 
   <div class="row">
     <div class="col-xs-12 col-sm-8 col-sm-push-2">
-      <h1 class="text-center">Chemistry Lab</h1>
       <hr/>
-      <br/>
-    </div>
-  </div>
-
-  <div class="meta-info">
-    <p><strong>APY:</strong> <span id="apyPercentage">?</span>%</p>
-    <p><strong>Withdrawal fee:</strong> <span id="withdrawalFeePercentage">?</span>%</p>
-    <p><strong>Total staked:</strong> <span id="totalStaked">?</span> LP tokens</p>
-  </div>
-
-  <div class="row">
-    <div id="stakeBtnContainer" class="btn-action">
-      <div class="max-input">
-        <input id="stakeAmount" type="number" placeholder="Amount to Stake" aria-label="stake amount"/>
-        <button id="stakeBtn" class="btn btn-default" type="button">Stake</button>
-      </div>
-      <p class="tokens-info">Balance: <span id="lpBalance">0</span> LP tokens</p>
-    </div>
-
-    <div id="withdrawBtnContainer" class="btn-action">
-      <div class="max-input">
-        <input id="withdrawAmount" type="number" placeholder="Amount to Withdraw" aria-label="withdraw amount"/>
-        <button id="withdrawBtn" class="btn btn-default" type="button">Withdraw</button>
-      </div>
-      <p class="tokens-info">Staked balance: <span id="stakeBalance">0</span> LP tokens</p>
-    </div>
-
-    <div id="claimBtnContainer" class="btn-action">
-      <p class="tokens-info">My rewards: <span id="rewardBalance">0</span> TEST tokens</p>
-      <button id="claimBtn" class="btn btn-default" type="button">Claim</button>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-xs-12 col-sm-8 col-sm-push-2">
       <h1 class="text-center">Snapshot Rewards</h1>
       <hr/>
+      <p>
+        Everytime someone withdraws from the vault, the fee is calculated and LP tokens are split: XLAB tokens are
+        burned and BNB tokens are sent to the reward contract.
+        Reward contract does the snapshot of XLAB token balances and creates a new reward.
+        XLAB token HODLers can claim their share (until it expires in 182 days).
+        The share is calculated proportionally depending on how much XLAB tokens you held at the snapshot time and what
+        was the total supply.
+      </p>
       <br/>
+      <img src="images/cz.svg" alt="cz" width="92" height="228"/>
     </div>
   </div>
 
@@ -76,11 +118,13 @@
 
   <div class="row">
     <h3 class="text-center">Network info</h3>
-    <div><strong>Name:</strong> Binance Smart Chain Testnet</div>
-    <div><strong>RPC URL:</strong> https://data-seed-prebsc-1-s1.binance.org:8545</div>
-    <div><strong>ChainID:</strong> 0x61</div>
-    <div><strong>Symbol:</strong> BNB</div>
-    <div><strong>Block Explorer:</strong> https://explorer.binance.org/smart-testnet</div>
+    <div class="network-info">
+      <div><strong>Name:</strong> Binance Smart Chain Testnet</div>
+      <div><strong>RPC URL:</strong> https://data-seed-prebsc-1-s1.binance.org:8545</div>
+      <div><strong>ChainID:</strong> 0x61</div>
+      <div><strong>Symbol:</strong> BNB</div>
+      <div><strong>Block Explorer:</strong> https://explorer.binance.org/smart-testnet</div>
+    </div>
   </div>
 </div>
 
@@ -90,10 +134,14 @@
       <div class="panel-heading">
         <h3>Reward #<span class="reward-title">?</span></h3>
       </div>
+      <img alt="140x140" data-src="holder.js/140x140"
+           class="img-rounded img-center" style="width: 100%;"
+           src="images/present.png"
+           data-holder-rendered="true">
       <div class="panel-body">
-        <strong>Reward</strong>: <span class="reward-amount">?</span> ETH<br/>
-        <strong>My share</strong>: <span class="reward-my-share">?</span> ETH<br/>
-        <button class="btn btn-default btn-claim" type="button" data-id="0">Claim</button>
+        <strong>Reward</strong>: <span class="reward-amount">?</span> BNB<br/>
+        <strong>My share</strong>: <span class="reward-my-share">?</span> BNB<br/>
+        <button class="btn btn-default btn-claim btn-app" type="button" data-id="0">Claim</button>
       </div>
     </div>
   </div>

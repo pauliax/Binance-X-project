@@ -13,8 +13,8 @@ module.exports = async function (deployer, network, accounts) {
   let WETHAddress = "0x0000000000000000000000000000000000000000";
 
   await deployer.deploy(Token,
-    "Test Token",   // _name
-    "TEST",         // _symbol
+    "Xxmas Lab Token",   // _name
+    "XLAB",         // _symbol
     "100000"        // _initialSupplyWithoutDecimals
   );
 

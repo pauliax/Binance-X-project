@@ -1,0 +1,31 @@
+body {
+    background-image: url("../images/xmas_bg.png");
+    background-repeat: repeat;
+}
+
+#main {
+    background-color: #eff0f3;
+}
+
+#lab {
+    text-align: center;
+}
+
+.network-info {
+    line-height: 2.2rem;
+    margin-left: 15px;
+}
+
+.btn-app, .btn-app:hover {
+    background-color: #ff8906;
+    border: none;
+    color: #fffffe;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
+
+.btn-app:hover {
+    transform: scale(1.2);
+}
