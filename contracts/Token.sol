@@ -24,6 +24,7 @@ contract Token is ERC20Snapshot, ERC20Burnable, Ownable, AccessControl {
   )
   ERC20(_name, _symbol)
   {
+    _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
     _mint(msg.sender, _initialSupplyWithoutDecimals * (10 ** uint(decimals())));
   }
 
